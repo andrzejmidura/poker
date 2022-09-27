@@ -37,5 +37,8 @@ mvnw
 mvnw.cmd
 .mvn
 
+### npm ###
+node_modules/
+
 ### other ###
 dia
