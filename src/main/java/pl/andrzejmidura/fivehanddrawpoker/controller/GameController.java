@@ -15,7 +15,7 @@ public class GameController {
     @Autowired
     GameService gameService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String index() {
         return "game";
     }
@@ -25,6 +25,13 @@ public class GameController {
     public MessageToSinglePlayer newRound(Principal principal) {
         String username = principal.getName();
         return gameService.messageToSinglePlayer(username);
+    }
+
+    @GetMapping("/getCredits")
+    @ResponseBody
+    public int getCredits(Principal principal) {
+        String username = principal.getName();
+        return gameService.getCredits(username);
     }
 
 }
