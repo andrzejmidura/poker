@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class PlayerInfo {
     private final List<Action> availableActions = new ArrayList<>();
-    private final List<Card> cards = new ArrayList<>();
+    private final List<Card> cards = new ArrayList<>(5);
     private int credits;
     private int stake;
 }
