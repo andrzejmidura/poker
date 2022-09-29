@@ -1,12 +1,12 @@
-package pl.andrzejmidura.fivehanddrawpoker.game.response;
+package pl.andrzejmidura.fivehanddrawpoker.game.messageDTO;
 
 import pl.andrzejmidura.fivehanddrawpoker.game.utils.Action;
 
-public class PlayerMessage {
+public class MessageFromPlayer {
     private Action action;
     private Integer value;
 
-    public PlayerMessage(Action action, Integer value) {
+    public MessageFromPlayer(Action action, Integer value) {
         this.action = action;
         this.value = value;
     }
