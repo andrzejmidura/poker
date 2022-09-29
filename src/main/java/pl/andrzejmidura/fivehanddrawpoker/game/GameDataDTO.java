@@ -2,6 +2,7 @@ package pl.andrzejmidura.fivehanddrawpoker.game;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.andrzejmidura.fivehanddrawpoker.game.messageDTO.MessageFromPlayer;
 import pl.andrzejmidura.fivehanddrawpoker.game.utils.Deck;
 
 import java.util.*;
@@ -17,6 +18,8 @@ public class GameDataDTO {
     private PlayerQueue playerQueue;
     private Map<String, PlayerInfo> playerInfoMap;
     private int highestStake;
+    private String playerUsernameThatSentMessage;
+    private MessageFromPlayer messageFromPlayer;
 
     public GameDataDTO() {
         this.deck = new Deck();
