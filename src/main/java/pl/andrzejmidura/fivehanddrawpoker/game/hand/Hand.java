@@ -1,4 +1,4 @@
-package pl.andrzejmidura.fivehanddrawpoker.game.utils;
+package pl.andrzejmidura.fivehanddrawpoker.game.hand;
 
 public enum Hand {
     ROYAL_FLUSH,
