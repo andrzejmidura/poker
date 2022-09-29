@@ -1,4 +1,4 @@
-package pl.andrzejmidura.fivehanddrawpoker.game;
+package pl.andrzejmidura.fivehanddrawpoker.game.hand;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
