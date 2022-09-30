@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
-public class Card {
+public class Card implements Comparable<Card> {
     private Suit suit;
     private Rank rank;
 
@@ -37,5 +37,10 @@ public class Card {
     @Override
     public int hashCode() {
         return Objects.hash(suit, rank);
+    }
+
+    @Override
+    public int compareTo(Card o) {
+        return this.rank.compareTo(o.rank);
     }
 }
