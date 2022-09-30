@@ -1,17 +1,17 @@
 package pl.andrzejmidura.fivehanddrawpoker.game.utils;
 
 public enum Rank {
-    ACE,
-    KING,
-    QUEEN,
-    JACK,
-    TEN,
-    NINE,
-    EIGHT,
-    SEVEN,
-    SIX,
-    FIVE,
-    FOUR,
+    TWO,
     THREE,
-    TWO
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    TEN,
+    JACK,
+    QUEEN,
+    KING,
+    ACE
 }
