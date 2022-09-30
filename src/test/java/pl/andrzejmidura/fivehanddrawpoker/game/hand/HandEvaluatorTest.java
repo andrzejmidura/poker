@@ -3,20 +3,19 @@ package pl.andrzejmidura.fivehanddrawpoker.game.hand;
 import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
 
-import pl.andrzejmidura.fivehanddrawpoker.game.hand.HandEvaluator;
 import pl.andrzejmidura.fivehanddrawpoker.game.utils.Card;
-import pl.andrzejmidura.fivehanddrawpoker.game.hand.Hand;
 import pl.andrzejmidura.fivehanddrawpoker.game.utils.Rank;
 import pl.andrzejmidura.fivehanddrawpoker.game.utils.Suit;
 
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: add assertTrue for checking if correct cards are saved in handWithCards after handEvaluator.evaluate()
 public class HandEvaluatorTest {
     HandEvaluator handEvaluator = new HandEvaluator();
 
     @Test
-    void testForHighCard() {
+    void testForHighCard() throws InvalidNumberOfCardsToEvaluateException {
         List<Card> cardsWithHighCard = new ArrayList<>(5);
         cardsWithHighCard.add(new Card(Suit.DIAMOND,    Rank.NINE));
         cardsWithHighCard.add(new Card(Suit.HEART,      Rank.ACE));
@@ -24,13 +23,13 @@ public class HandEvaluatorTest {
         cardsWithHighCard.add(new Card(Suit.CLUB,       Rank.TWO));
         cardsWithHighCard.add(new Card(Suit.SPADE,      Rank.QUEEN));
 
-        Hand hand = handEvaluator.evaluate(cardsWithHighCard);
+        HandWithCards handWithCards = handEvaluator.evaluate(cardsWithHighCard);
 
-        assertEquals(Hand.HIGH_CARD, hand);
+        assertEquals(Hand.HIGH_CARD, handWithCards.getHand());
     }
 
     @Test
-    void testForPair() {
+    void testForPair() throws InvalidNumberOfCardsToEvaluateException {
         List<Card> cardsWithPair = new ArrayList<>(5);
         cardsWithPair.add(new Card(Suit.DIAMOND,    Rank.NINE));
         cardsWithPair.add(new Card(Suit.HEART,      Rank.ACE));
@@ -38,13 +37,13 @@ public class HandEvaluatorTest {
         cardsWithPair.add(new Card(Suit.CLUB,       Rank.TWO));
         cardsWithPair.add(new Card(Suit.SPADE,      Rank.QUEEN));
 
-        Hand hand = handEvaluator.evaluate(cardsWithPair);
+        HandWithCards handWithCards = handEvaluator.evaluate(cardsWithPair);
 
-        assertEquals(Hand.PAIR, hand);
+        assertEquals(Hand.PAIR, handWithCards.getHand());
     }
 
     @Test
-    void testForTwoPairs() {
+    void testForTwoPairs() throws InvalidNumberOfCardsToEvaluateException {
         List<Card> cardsWithTwoPairs = new ArrayList<>(5);
         cardsWithTwoPairs.add(new Card(Suit.DIAMOND,    Rank.NINE));
         cardsWithTwoPairs.add(new Card(Suit.HEART,      Rank.ACE));
@@ -52,13 +51,13 @@ public class HandEvaluatorTest {
         cardsWithTwoPairs.add(new Card(Suit.CLUB,       Rank.TWO));
         cardsWithTwoPairs.add(new Card(Suit.SPADE,      Rank.TWO));
 
-        Hand hand = handEvaluator.evaluate(cardsWithTwoPairs);
+        HandWithCards handWithCards = handEvaluator.evaluate(cardsWithTwoPairs);
 
-        assertEquals(Hand.TWO_PAIRS, hand);
+        assertEquals(Hand.TWO_PAIRS, handWithCards.getHand());
     }
 
     @Test
-    void testForThreeOfAKind() {
+    void testForThreeOfAKind() throws InvalidNumberOfCardsToEvaluateException {
         List<Card> cardsWithThreeOfAKind = new ArrayList<>(5);
         cardsWithThreeOfAKind.add(new Card(Suit.DIAMOND,    Rank.NINE));
         cardsWithThreeOfAKind.add(new Card(Suit.HEART,      Rank.ACE));
@@ -66,13 +65,13 @@ public class HandEvaluatorTest {
         cardsWithThreeOfAKind.add(new Card(Suit.CLUB,       Rank.TWO));
         cardsWithThreeOfAKind.add(new Card(Suit.SPADE,      Rank.NINE));
 
-        Hand hand = handEvaluator.evaluate(cardsWithThreeOfAKind);
+        HandWithCards handWithCards = handEvaluator.evaluate(cardsWithThreeOfAKind);
 
-        assertEquals(Hand.THREE_OF_A_KIND, hand);
+        assertEquals(Hand.THREE_OF_A_KIND, handWithCards.getHand());
     }
 
     @Test
-    void testForStraight() {
+    void testForStraight() throws InvalidNumberOfCardsToEvaluateException {
         List<Card> cardsWithStraight = new ArrayList<>(5);
         cardsWithStraight.add(new Card(Suit.HEART,      Rank.TEN));
         cardsWithStraight.add(new Card(Suit.CLUB,       Rank.EIGHT));
@@ -80,13 +79,13 @@ public class HandEvaluatorTest {
         cardsWithStraight.add(new Card(Suit.DIAMOND,    Rank.SIX));
         cardsWithStraight.add(new Card(Suit.HEART,      Rank.SEVEN));
 
-        Hand hand = handEvaluator.evaluate(cardsWithStraight);
+        HandWithCards handWithCards = handEvaluator.evaluate(cardsWithStraight);
 
-        assertEquals(Hand.STRAIGHT, hand);
+        assertEquals(Hand.STRAIGHT, handWithCards.getHand());
     }
 
     @Test
-    void testForFlush() {
+    void testForFlush() throws InvalidNumberOfCardsToEvaluateException {
         List<Card> cardsWithFlush = new ArrayList<>(5);
         cardsWithFlush.add(new Card(Suit.CLUB, Rank.KING));
         cardsWithFlush.add(new Card(Suit.CLUB, Rank.TEN));
@@ -94,13 +93,13 @@ public class HandEvaluatorTest {
         cardsWithFlush.add(new Card(Suit.CLUB, Rank.SEVEN));
         cardsWithFlush.add(new Card(Suit.CLUB, Rank.FIVE));
 
-        Hand hand = handEvaluator.evaluate(cardsWithFlush);
+        HandWithCards handWithCards = handEvaluator.evaluate(cardsWithFlush);
 
-        assertEquals(Hand.FLUSH, hand);
+        assertEquals(Hand.FLUSH, handWithCards.getHand());
     }
 
     @Test
-    void testForFullHouse() {
+    void testForFullHouse() throws InvalidNumberOfCardsToEvaluateException {
         List<Card> cardsWithFullHouse = new ArrayList<>(5);
         cardsWithFullHouse.add(new Card(Suit.HEART,     Rank.ACE));
         cardsWithFullHouse.add(new Card(Suit.HEART,     Rank.THREE));
@@ -108,13 +107,13 @@ public class HandEvaluatorTest {
         cardsWithFullHouse.add(new Card(Suit.DIAMOND,   Rank.ACE));
         cardsWithFullHouse.add(new Card(Suit.SPADE,     Rank.THREE));
 
-        Hand hand = handEvaluator.evaluate(cardsWithFullHouse);
+        HandWithCards handWithCards = handEvaluator.evaluate(cardsWithFullHouse);
 
-        assertEquals(Hand.FULL_HOUSE, hand);
+        assertEquals(Hand.FULL_HOUSE, handWithCards.getHand());
     }
 
     @Test
-    void testForFourOfAKind() {
+    void testForFourOfAKind() throws InvalidNumberOfCardsToEvaluateException {
         List<Card> cardsWithFourOfAKind = new ArrayList<>(5);
         cardsWithFourOfAKind.add(new Card(Suit.HEART, Rank.NINE));
         cardsWithFourOfAKind.add(new Card(Suit.CLUB, Rank.NINE));
@@ -122,13 +121,13 @@ public class HandEvaluatorTest {
         cardsWithFourOfAKind.add(new Card(Suit.SPADE, Rank.NINE));
         cardsWithFourOfAKind.add(new Card(Suit.DIAMOND, Rank.NINE));
 
-        Hand hand = handEvaluator.evaluate(cardsWithFourOfAKind);
+        HandWithCards handWithCards = handEvaluator.evaluate(cardsWithFourOfAKind);
 
-        assertEquals(Hand.FOUR_OF_A_KIND, hand);
+        assertEquals(Hand.FOUR_OF_A_KIND, handWithCards.getHand());
     }
 
     @Test
-    void testForStraightFlush() {
+    void testForStraightFlush() throws InvalidNumberOfCardsToEvaluateException {
         List<Card> cardsWithStraightFlush = new ArrayList<>(5);
         cardsWithStraightFlush.add(new Card(Suit.SPADE, Rank.JACK));
         cardsWithStraightFlush.add(new Card(Suit.SPADE, Rank.EIGHT));
@@ -136,13 +135,13 @@ public class HandEvaluatorTest {
         cardsWithStraightFlush.add(new Card(Suit.SPADE, Rank.SEVEN));
         cardsWithStraightFlush.add(new Card(Suit.SPADE, Rank.NINE));
 
-        Hand hand = handEvaluator.evaluate(cardsWithStraightFlush);
+        HandWithCards handWithCards = handEvaluator.evaluate(cardsWithStraightFlush);
 
-        assertEquals(Hand.STRAIGHT_FLUSH, hand);
+        assertEquals(Hand.STRAIGHT_FLUSH, handWithCards.getHand());
     }
 
     @Test
-    void testForRoyalFlush() {
+    void testForRoyalFlush() throws InvalidNumberOfCardsToEvaluateException {
         List<Card> cardsWithRoyalFlush = new ArrayList<>(5);
         cardsWithRoyalFlush.add(new Card(Suit.DIAMOND, Rank.ACE));
         cardsWithRoyalFlush.add(new Card(Suit.DIAMOND, Rank.TEN));
@@ -150,9 +149,9 @@ public class HandEvaluatorTest {
         cardsWithRoyalFlush.add(new Card(Suit.DIAMOND, Rank.KING));
         cardsWithRoyalFlush.add(new Card(Suit.DIAMOND, Rank.QUEEN));
 
-        Hand hand = handEvaluator.evaluate(cardsWithRoyalFlush);
+        HandWithCards handWithCards = handEvaluator.evaluate(cardsWithRoyalFlush);
 
-        assertEquals(Hand.ROYAL_FLUSH, hand);
+        assertEquals(Hand.ROYAL_FLUSH, handWithCards.getHand());
     }
 
 }
