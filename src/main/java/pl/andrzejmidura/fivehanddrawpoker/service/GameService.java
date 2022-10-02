@@ -14,10 +14,14 @@ import java.util.Optional;
 
 @Service
 public class GameService {
+    private final UserRepository userRepository;
+    private final Game game;
+
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    Game game;
+    public GameService(UserRepository userRepository, Game game) {
+        this.userRepository = userRepository;
+        this.game = game;
+    }
 
     public MessageToSinglePlayer messageToSinglePlayer(String username) {
         return game.getMessageToSinglePlayer(username);
