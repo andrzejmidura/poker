@@ -7,6 +7,7 @@ import pl.andrzejmidura.fivehanddrawpoker.game.utils.Suit;
 import java.util.Collections;
 import java.util.List;
 
+//TODO: oddzielic is i saved
 public class HandEvaluator {
     private final HandWithCards handWithCards = new HandWithCards();
     private List<Card> cardsSortedByRank;
@@ -18,19 +19,15 @@ public class HandEvaluator {
      *  if we checked that there is a PAIR, then we have to check if there are TWO_PAIRS or THREE_OF_A_KIND etc.
      * For better understanding of how this function works, check hand_evaluation.jpg diagram
      * */
-    public HandWithCards evaluate(List<Card> cards) throws InvalidNumberOfCardsToEvaluateException {
+    public HandWithCards evaluate(List<Card> cards) {
         if (cards.size() != 5) throw new InvalidNumberOfCardsToEvaluateException("Invalid number of cards passed in parameter; expected: 5, got: " + cards.size());
 
         this.cardsSortedByRank = cards;
         Collections.sort(cardsSortedByRank);
 
         if (savedFlush()) {
-            if (!savedFullHouse()) {
-                if (!savedFourOfAKind()) {
-                    if (savedStraightFlush()) {
-                        savedRoyalFlush();
-                    }
-                }
+            if (savedStraightFlush()) {
+                savedRoyalFlush();
             }
         }
         else if (savedPair()){
@@ -153,7 +150,7 @@ public class HandEvaluator {
         Card secondCardOfPair;
         Card highCard = cardsSortedByRank.get(0);
 
-        for (int i=0; i<3; i++) {
+        for (int i=0; i<2; i++) {
             firstCardOfPair = cardsSortedByRank.get(i);
             secondCardOfPair = cardsSortedByRank.get(i+1);
             if (firstCardOfPair.getRank().equals(secondCardOfPair.getRank())) {
@@ -208,7 +205,7 @@ public class HandEvaluator {
         Card secondCardOfThree;
         Card thirdCardOfThree;
 
-        for (int i=0; i<2; i++) {
+        for (int i=0; i<3; i++) {
             firstCardOfThree = cardsSortedByRank.get(i);
             secondCardOfThree = cardsSortedByRank.get(i+1);
             thirdCardOfThree = cardsSortedByRank.get(i+2);
