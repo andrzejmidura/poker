@@ -8,22 +8,19 @@ import org.springframework.stereotype.Service;
 import pl.andrzejmidura.fivehanddrawpoker.entity.User;
 import pl.andrzejmidura.fivehanddrawpoker.repository.UserRepository;
 
-import java.util.Optional;
-
 @Service
 public class UserService implements UserDetailsService {
+    private final UserRepository userRepository;
+
     @Autowired
-    UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findUserByUsername(username);
-        if(user.isPresent()) {
-            return user.get();
-        }
-        else {
-            throw new UsernameNotFoundException("Cannot find user with username '" + username + "'");
-        }
+        return userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with username '" + username + "'"));
     }
 
     public void addUser(User user) {
