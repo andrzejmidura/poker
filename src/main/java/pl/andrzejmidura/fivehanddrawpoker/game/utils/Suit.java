@@ -1,8 +1,8 @@
 package pl.andrzejmidura.fivehanddrawpoker.game.utils;
 
 public enum Suit {
-    HEART,
-    DIAMOND,
+    SPADE,
     CLUB,
-    SPADE
+    DIAMOND,
+    HEART
 }
