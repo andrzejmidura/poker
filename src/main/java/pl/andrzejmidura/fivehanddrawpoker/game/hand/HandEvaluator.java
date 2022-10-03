@@ -13,17 +13,18 @@ public class HandEvaluator {
     private List<Card> cardsSortedByRank;
 
     /**
-     * This function evaluates cards.
+     * This function evaluates cardsRepresentingHand.
      * The evaluation is achieved by processing multiple checks.
      * The order of checks is determined by hand specificity, eg:
      *  if we checked that there is a PAIR, then we have to check if there are TWO_PAIRS or THREE_OF_A_KIND etc.
      * For better understanding of how this function works, check hand_evaluation.jpg diagram
      * */
     public HandWithCards evaluate(List<Card> cards) {
-        if (cards.size() != 5) throw new InvalidNumberOfCardsToEvaluateException("Invalid number of cards passed in parameter; expected: 5, got: " + cards.size());
+        if (cards.size() != 5) throw new InvalidNumberOfCardsToEvaluateException("Invalid number of cardsRepresentingHand passed in parameter; expected: 5, got: " + cards.size());
 
         this.cardsSortedByRank = cards;
         Collections.sort(cardsSortedByRank);
+        handWithCards.setAllCards(cardsSortedByRank);
 
         if (savedFlush()) {
             if (savedStraightFlush()) {
@@ -57,7 +58,7 @@ public class HandEvaluator {
 
         if (isFlush) {
             handWithCards.setHand(Hand.FLUSH);
-            handWithCards.setCards(cardsSortedByRank);
+            handWithCards.setCardsRepresentingHand(cardsSortedByRank);
         }
 
         return isFlush;
@@ -82,7 +83,7 @@ public class HandEvaluator {
 
         if (isFullHouse) {
             handWithCards.setHand(Hand.FULL_HOUSE);
-            handWithCards.setCards(cardsSortedByRank);
+            handWithCards.setCardsRepresentingHand(cardsSortedByRank);
         }
 
         return isFullHouse;
@@ -100,7 +101,7 @@ public class HandEvaluator {
             }
             if (isFourOfAKind) {
                 handWithCards.setHand(Hand.FOUR_OF_A_KIND);
-                handWithCards.setCards(cardsSortedByRank.subList(0, 4));
+                handWithCards.setCardsRepresentingHand(cardsSortedByRank.subList(0, 4));
             }
         }
         else {
@@ -111,7 +112,7 @@ public class HandEvaluator {
             }
             if (isFourOfAKind) {
                 handWithCards.setHand(Hand.FOUR_OF_A_KIND);
-                handWithCards.setCards(cardsSortedByRank.subList(1, 5));
+                handWithCards.setCardsRepresentingHand(cardsSortedByRank.subList(1, 5));
             }
         }
 
@@ -122,7 +123,7 @@ public class HandEvaluator {
 
         if (isStraightFlush) {
             handWithCards.setHand(Hand.STRAIGHT_FLUSH);
-            handWithCards.setCards(cardsSortedByRank);
+            handWithCards.setCardsRepresentingHand(cardsSortedByRank);
         }
 
         return isStraightFlush;
@@ -139,7 +140,7 @@ public class HandEvaluator {
 
         if (isRoyalFlush) {
             handWithCards.setHand(Hand.ROYAL_FLUSH);
-            handWithCards.setCards(cardsSortedByRank);
+            handWithCards.setCardsRepresentingHand(cardsSortedByRank);
         }
 
         return isRoyalFlush;
@@ -155,7 +156,7 @@ public class HandEvaluator {
             secondCardOfPair = cardsSortedByRank.get(i+1);
             if (firstCardOfPair.getRank().equals(secondCardOfPair.getRank())) {
                 handWithCards.setHand(Hand.PAIR);
-                handWithCards.setCards(List.of(firstCardOfPair, secondCardOfPair));
+                handWithCards.setCardsRepresentingHand(List.of(firstCardOfPair, secondCardOfPair));
                 isPair = true;
             }
             else if (highCard.compareTo(secondCardOfPair)<0) {
@@ -165,7 +166,7 @@ public class HandEvaluator {
 
         if (!isPair) {
             handWithCards.setHand(Hand.HIGH_CARD);
-            handWithCards.setCards(List.of(highCard));
+            handWithCards.setCardsRepresentingHand(List.of(highCard));
         }
 
         return isPair;
@@ -181,19 +182,19 @@ public class HandEvaluator {
         // 1 1 2 2 3
         if (card0.getRank().equals(card1.getRank()) && card2.getRank().equals(card3.getRank()) && !card0.getRank().equals(card2.getRank())) {
             handWithCards.setHand(Hand.TWO_PAIRS);
-            handWithCards.setCards(List.of(card0, card1, card2, card3));
+            handWithCards.setCardsRepresentingHand(List.of(card0, card1, card2, card3));
             isTwoPairs = true;
         }
         // 1 1 3 2 2
         else if (card0.getRank().equals(card1.getRank()) && card3.getRank().equals(card4.getRank()) && !card0.getRank().equals(card3.getRank())) {
             handWithCards.setHand(Hand.TWO_PAIRS);
-            handWithCards.setCards(List.of(card0, card1, card3, card4));
+            handWithCards.setCardsRepresentingHand(List.of(card0, card1, card3, card4));
             isTwoPairs = true;
         }
         // 3 1 1 2 2
         else if (card1.getRank().equals(card2.getRank()) && card3.getRank().equals(card4.getRank()) && !card1.getRank().equals(card3.getRank())) {
             handWithCards.setHand(Hand.TWO_PAIRS);
-            handWithCards.setCards(List.of(card1, card2, card3, card4));
+            handWithCards.setCardsRepresentingHand(List.of(card1, card2, card3, card4));
             isTwoPairs = true;
         }
 
@@ -211,7 +212,7 @@ public class HandEvaluator {
             thirdCardOfThree = cardsSortedByRank.get(i+2);
             if (firstCardOfThree.getRank().equals(secondCardOfThree.getRank()) && secondCardOfThree.getRank().equals(thirdCardOfThree.getRank())) {
                 handWithCards.setHand(Hand.THREE_OF_A_KIND);
-                handWithCards.setCards(List.of(firstCardOfThree, secondCardOfThree, thirdCardOfThree));
+                handWithCards.setCardsRepresentingHand(List.of(firstCardOfThree, secondCardOfThree, thirdCardOfThree));
                 isThreeOfAKind = true;
             }
         }
@@ -221,17 +222,24 @@ public class HandEvaluator {
     private boolean savedStraight() {
         boolean isStraight = true;
 
-        for (int i = 1; i < 5; i++) {
-            Card previousCard = cardsSortedByRank.get(i-1);
-            Card nextCard = cardsSortedByRank.get(i);
-            if (previousCard.getRank().compareTo(nextCard.getRank())!=-1) {
-                isStraight = false;
+
+        if (!(cardsSortedByRank.get(0).getRank().equals(Rank.TWO) &&
+                cardsSortedByRank.get(1).getRank().equals(Rank.THREE) &&
+                cardsSortedByRank.get(2).getRank().equals(Rank.FOUR) &&
+                cardsSortedByRank.get(3).getRank().equals(Rank.FIVE) &&
+                cardsSortedByRank.get(4).getRank().equals(Rank.ACE))) {
+            for (int i = 1; i < 4; i++) {
+                Card previousCard = cardsSortedByRank.get(i-1);
+                Card nextCard = cardsSortedByRank.get(i);
+                if (previousCard.getRank().compareTo(nextCard.getRank())!=-1) {
+                    isStraight = false;
+                }
             }
         }
 
         if (isStraight) {
             handWithCards.setHand(Hand.STRAIGHT);
-            handWithCards.setCards(cardsSortedByRank);
+            handWithCards.setCardsRepresentingHand(cardsSortedByRank);
         }
         return isStraight;
     }
