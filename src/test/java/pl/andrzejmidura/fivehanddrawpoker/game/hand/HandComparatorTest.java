@@ -6,6 +6,8 @@ import pl.andrzejmidura.fivehanddrawpoker.game.utils.Card;
 import pl.andrzejmidura.fivehanddrawpoker.game.utils.Rank;
 import pl.andrzejmidura.fivehanddrawpoker.game.utils.Suit;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HandComparatorTest {
@@ -209,10 +211,10 @@ public class HandComparatorTest {
                 new Card(Suit.DIAMOND, Rank.TWO),
                 new Card(Suit.CLUB, Rank.FIVE));
         List<Card> weakerTwoPairs = List.of(
-                new Card(Suit.HEART, Rank.FIVE),
+                new Card(Suit.HEART, Rank.FOUR),
                 new Card(Suit.SPADE, Rank.TWO),
                 new Card(Suit.DIAMOND, Rank.TWO),
-                new Card(Suit.CLUB, Rank.FIVE));
+                new Card(Suit.CLUB, Rank.FOUR));
         HandWithCards handWithStrongerTwoPairs = new HandWithCards(Hand.TWO_PAIRS, strongerTwoPairs);
         HandWithCards handWithWeakerTwoPairs = new HandWithCards(Hand.TWO_PAIRS, weakerTwoPairs);
 
@@ -242,11 +244,11 @@ public class HandComparatorTest {
     @Test
     void testStrongerStraightToWeakerStraightComparison() {
         List<Card> strongerStraight = List.of(
-                new Card(Suit.HEART,      Rank.TEN),
-                new Card(Suit.DIAMOND,    Rank.SIX),
-                new Card(Suit.CLUB,       Rank.EIGHT),
-                new Card(Suit.SPADE,      Rank.NINE),
-                new Card(Suit.HEART,      Rank.SEVEN));
+                new Card(Suit.HEART,      Rank.ACE),
+                new Card(Suit.DIAMOND,    Rank.FIVE),
+                new Card(Suit.CLUB,       Rank.FOUR),
+                new Card(Suit.SPADE,      Rank.THREE),
+                new Card(Suit.HEART,      Rank.TWO));
         List<Card> weakerStraight = List.of(
                 new Card(Suit.CLUB,       Rank.EIGHT),
                 new Card(Suit.HEART,      Rank.TEN),
@@ -263,18 +265,18 @@ public class HandComparatorTest {
 
     @Test
     void testStrongerFlushToWeakerFlushComparison() {
-        List<Card> strongerFlush = List.of(
+        List<Card> strongerFlush = new ArrayList<>(Arrays.asList(
                 new Card(Suit.DIAMOND, Rank.EIGHT),
                 new Card(Suit.DIAMOND, Rank.KING),
                 new Card(Suit.DIAMOND, Rank.SEVEN),
                 new Card(Suit.DIAMOND, Rank.TEN),
-                new Card(Suit.DIAMOND, Rank.FIVE));
-        List<Card> weakerFlush = List.of(
+                new Card(Suit.DIAMOND, Rank.FIVE)));
+        List<Card> weakerFlush = new ArrayList<>(Arrays.asList(
                 new Card(Suit.CLUB, Rank.TEN),
-                new Card(Suit.CLUB, Rank.KING),
+                new Card(Suit.CLUB, Rank.JACK),
                 new Card(Suit.CLUB, Rank.SEVEN),
                 new Card(Suit.CLUB, Rank.EIGHT),
-                new Card(Suit.CLUB, Rank.FIVE));
+                new Card(Suit.CLUB, Rank.FIVE)));
         HandWithCards handWithStrongerFlush = new HandWithCards(Hand.FLUSH, strongerFlush);
         HandWithCards handWithWeakerFlush = new HandWithCards(Hand.FLUSH, weakerFlush);
 
@@ -287,10 +289,10 @@ public class HandComparatorTest {
     void testStrongerFullHouseToWeakerFullHouseComparison() {
         List<Card> strongerFullHouse = List.of(
                 new Card(Suit.HEART,     Rank.ACE),
-                new Card(Suit.HEART,     Rank.THREE),
+                new Card(Suit.DIAMOND,     Rank.THREE),
                 new Card(Suit.CLUB,      Rank.ACE),
                 new Card(Suit.DIAMOND,   Rank.ACE),
-                new Card(Suit.SPADE,     Rank.THREE));
+                new Card(Suit.CLUB,     Rank.THREE));
         List<Card> weakerFullHouse = List.of(
                 new Card(Suit.HEART,     Rank.KING),
                 new Card(Suit.HEART,     Rank.THREE),
@@ -365,6 +367,66 @@ public class HandComparatorTest {
         HandWithCards handWithWeakerRoyalFlush = new HandWithCards(Hand.ROYAL_FLUSH, weakerRoyalFlush);
 
         int result = handComparator.compare(handWithWeakerRoyalFlush, handWithStrongerRoyalFlush);
+
+        assertEquals(0, result);
+    }
+
+    @Test
+    void testSamePairsComparison() {
+        List<Card> pair1 = List.of(
+                new Card(Suit.CLUB, Rank.JACK),
+                new Card(Suit.SPADE, Rank.JACK));
+        List<Card> strongerCards = new ArrayList<>(Arrays.asList(
+                new Card(Suit.CLUB, Rank.JACK),
+                new Card(Suit.SPADE, Rank.JACK),
+                new Card(Suit.DIAMOND, Rank.TWO),
+                new Card(Suit.SPADE, Rank.QUEEN),
+                new Card(Suit.HEART, Rank.EIGHT)));
+        List<Card> pair2 = List.of(
+                new Card(Suit.DIAMOND, Rank.JACK),
+                new Card(Suit.HEART, Rank.JACK));
+        List<Card> weakerCards = new ArrayList<>(Arrays.asList(
+                new Card(Suit.CLUB, Rank.JACK),
+                new Card(Suit.SPADE, Rank.JACK),
+                new Card(Suit.DIAMOND, Rank.TWO),
+                new Card(Suit.SPADE, Rank.TEN),
+                new Card(Suit.HEART, Rank.NINE)));
+        HandWithCards handWithStrongerCards = new HandWithCards(Hand.PAIR, pair1, strongerCards);
+        HandWithCards handWithWeakerCards = new HandWithCards(Hand.PAIR, pair2, weakerCards);
+
+        int result = handComparator.compare(handWithWeakerCards, handWithStrongerCards);
+
+        assertEquals(-1, result);
+    }
+
+    @Test
+    void testSameTwoPairsComparison() {
+        List<Card> twoPair1 = List.of(
+                new Card(Suit.HEART, Rank.FIVE),
+                new Card(Suit.SPADE, Rank.TWO),
+                new Card(Suit.DIAMOND, Rank.TWO),
+                new Card(Suit.CLUB, Rank.FIVE));
+        List<Card> strongerCards = new ArrayList<>(Arrays.asList(
+                new Card(Suit.HEART, Rank.FIVE),
+                new Card(Suit.SPADE, Rank.TWO),
+                new Card(Suit.DIAMOND, Rank.TWO),
+                new Card(Suit.CLUB, Rank.FIVE),
+                new Card(Suit.HEART, Rank.NINE)));
+        List<Card> twoPair2 = List.of(
+                new Card(Suit.DIAMOND, Rank.FIVE),
+                new Card(Suit.CLUB, Rank.TWO),
+                new Card(Suit.HEART, Rank.TWO),
+                new Card(Suit.SPADE, Rank.FIVE));
+        List<Card> weakerCards = new ArrayList<>(Arrays.asList(
+                new Card(Suit.DIAMOND, Rank.FIVE),
+                new Card(Suit.CLUB, Rank.TWO),
+                new Card(Suit.HEART, Rank.TWO),
+                new Card(Suit.SPADE, Rank.FIVE),
+                new Card(Suit.HEART, Rank.SIX)));
+        HandWithCards handWithStrongerCards = new HandWithCards(Hand.TWO_PAIRS, twoPair1, strongerCards);
+        HandWithCards handWithWeakerCards = new HandWithCards(Hand.TWO_PAIRS, twoPair2, weakerCards);
+
+        int result = handComparator.compare(handWithWeakerCards, handWithStrongerCards);
 
         assertEquals(-1, result);
     }
