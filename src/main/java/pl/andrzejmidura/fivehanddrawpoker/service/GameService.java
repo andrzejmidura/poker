@@ -1,6 +1,7 @@
 package pl.andrzejmidura.fivehanddrawpoker.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.andrzejmidura.fivehanddrawpoker.entity.User;
@@ -16,11 +17,14 @@ import java.util.Optional;
 public class GameService {
     private final UserRepository userRepository;
     private final Game game;
+    private final SimpMessagingTemplate messageSender;
+
 
     @Autowired
-    public GameService(UserRepository userRepository, Game game) {
+    public GameService(UserRepository userRepository, Game game, SimpMessagingTemplate messageSender) {
         this.userRepository = userRepository;
         this.game = game;
+        this.messageSender = messageSender;
     }
 
     public MessageToSinglePlayer messageToSinglePlayer(String username) {
@@ -29,15 +33,10 @@ public class GameService {
     public MessageToAllSubscribers messageToAllSubscribers(String username, MessageFromPlayer message) {
         return game.getMessageToAllSubscribers(username, message);
     }
-
     public int getCredits(String username) {
-        Optional<User> requestingUser = userRepository.findUserByUsername(username);
-        if(requestingUser.isPresent()) {
-            return requestingUser.get().getCredits();
-        }
-        else {
-            throw new UsernameNotFoundException("Cannot find user with username '" + username + "'");
-        }
+        return userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with username '" + username + "'"))
+                .getCredits();
     }
 
 }
