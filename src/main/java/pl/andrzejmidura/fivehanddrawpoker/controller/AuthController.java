@@ -14,8 +14,14 @@ import java.util.Map;
 @Controller
 public class AuthController {
     private static final int INITIAL_CREDITS = 200;
-    @Autowired private PasswordEncoder passwordEncoder;
-    @Autowired private UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+
+    @Autowired
+    public AuthController(PasswordEncoder passwordEncoder, UserService userService) {
+        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
+    }
 
     @GetMapping("/login")
     public String getLogin() {
