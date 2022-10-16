@@ -11,9 +11,12 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/game")
 public class GameController {
+    final GameService gameService;
 
     @Autowired
-    GameService gameService;
+    public GameController(GameService gameService) {
+        this.gameService = gameService;
+    }
 
     @GetMapping("")
     public String index() {
