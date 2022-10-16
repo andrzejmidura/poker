@@ -9,9 +9,12 @@ import pl.andrzejmidura.fivehanddrawpoker.repository.GameHistoryRepository;
 @Controller
 @RequestMapping("/history")
 public class HistoryController {
+    private GameHistoryRepository gameHistoryRepository;
 
     @Autowired
-    private GameHistoryRepository gameHistoryRepository;
+    public HistoryController(GameHistoryRepository gameHistoryRepository) {
+        this.gameHistoryRepository = gameHistoryRepository;
+    }
 
     @GetMapping("")
     public String getHistory() {
